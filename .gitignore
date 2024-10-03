@@ -1,0 +1,15 @@
+.terraform.lock.hcl
+.terraform/modules/modules.json
+.terraform/providers/registry.terraform.io/hashicorp/aws/5.69.0/linux_amd64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/aws/5.69.0/linux_amd64/terraform-provider-aws_v5.69.0_x5
+.terraform/providers/registry.terraform.io/hashicorp/cloudinit/2.3.5/linux_amd64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/cloudinit/2.3.5/linux_amd64/terraform-provider-cloudinit_v2.3.5_x5
+.terraform/providers/registry.terraform.io/hashicorp/null/3.2.3/linux_amd64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/null/3.2.3/linux_amd64/terraform-provider-null_v3.2.3_x5
+.terraform/providers/registry.terraform.io/hashicorp/time/0.12.1/linux_amd64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/time/0.12.1/linux_amd64/terraform-provider-time_v0.12.1_x5
+.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.6/linux_amd64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.6/linux_amd64/terraform-provider-tls_v4.0.6_x5
+test.py
+.terraform.tfstate.lock.info
+terraform.tfstate

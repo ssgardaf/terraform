@@ -5,7 +5,7 @@
 ## 목차
 
 - [프로젝트 소개](#프로젝트-소개)
-- [필수 조건](#필수-조건)
+- [파일 구조](#파일-구조)
 - [설치 방법](#설치-방법)
 - [Terraform 명령어](#terraform-명령어)
 
@@ -13,12 +13,19 @@
 
 Terraform은 인프라를 코드로 관리할 수 있도록 해주는 도구입니다. 클라우드 인프라 자원(AWS, GCP, Azure 등)을 자동으로 생성하고 관리할 수 있습니다. 이 가이드에서는 Ubuntu 환경에서 Terraform을 설치하는 과정을 설명합니다.
 
-## 필수 조건
+## 파일 구조
 
-Terraform을 설치하기 위해서는 다음과 같은 환경이 필요합니다:
+Terraform을 설치하기 위해서는 다음과 같은 파일 구조가 필요합니다:
 
-- Ubuntu 18.04 이상
-- 관리자 권한 (sudo)
+<pre>
+<code>
+  terraform/
+  ├── vpc.tf                # VPC 및 네트워크 설정
+  ├── output.tf             # 출력 설정
+  ├── provider.tf           # AWS Provider 설정
+  ├── variables.tf          # 변수 설정
+</code>
+</pre>
 
 ## 설치 방법
 
@@ -31,6 +38,13 @@ sudo apt install -y gnupg software-properties-common curl
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt install terraform
+
+sudo apt-get install python3-venv
+python3 -m venv awscli-env
+source awscli-env/bin/activate
+pip install awscli
+
+aws configure
 </code>
 </pre>
 

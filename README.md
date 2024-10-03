@@ -69,7 +69,6 @@ Terraform 설치 후 사용할 수 있는 몇 가지 기본 명령어입니다.
   ```bash
   terraform apply
 
-  
 - **현재 Terraform 상태 파일에 기록된 리소스 정보를 확인할 수 있는 명령어입니다.
   ```bash
   terraform show
@@ -77,4 +76,3 @@ Terraform 설치 후 사용할 수 있는 몇 가지 기본 명령어입니다.
 - **배포된 모든 인프라 리소스를 제거하는 명령어입니다. 테스트 환경에서 리소스를 제거하거나, 인프라를 다시 설정해야 할 때 사용합니다.
   ```bash
   terraform destroy
-

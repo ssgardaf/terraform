@@ -1,0 +1,48 @@
+# Kafka configuration for Helm chart with dynamic provisioning
+
+## Kafka configuration
+kafka:
+  enabled: true
+  replicaCount: 3  # Kafka 브로커의 수
+  image:
+    repository: bitnami/kafka
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  ## Resources for Kafka brokers
+  resources:
+    requests:
+      cpu: "500m"  # CPU 요청
+      memory: "1Gi"  # 메모리 요청
+    limits:
+      cpu: "1"  # CPU 제한
+      memory: "2Gi"  # 메모리 제한
+
+  ## Enable persistence and use dynamic provisioning
+  persistence:
+    enabled: true
+    storageClass: "gp2"  # 사용할 스토리지 클래스
+    accessModes:
+      - ReadWriteOnce  # 접근 모드
+    size: 8Gi  # 요청할 스토리지 크기
+
+  ## Enable KRaft mode
+  controller:
+    enabled: true  # KRaft 모드 활성화
+    replicaCount: 3  # KRaft 컨트롤러 수
+
+## Disable Zookeeper since we're using KRaft
+zookeeper:
+  enabled: false  # Zookeeper 비활성화
+
+## Anti-Affinity settings for high availability
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - kafka
+        topologyKey: "kubernetes.io/hostname"

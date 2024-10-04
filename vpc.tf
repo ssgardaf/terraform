@@ -9,6 +9,9 @@ resource "aws_vpc" "main" {
   }
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
 # Public 서브넷 생성
 resource "aws_subnet" "public_subnets" {
   count = length(var.public_subnet_cidrs)

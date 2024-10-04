@@ -16,6 +16,16 @@ resource "aws_security_group" "websocket_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "websocket-sg"
+    Environment = "Production"  # 예시 태그 추가
+  }
+}
+
+# Elastic IP 생성
+resource "aws_eip" "websocket_eip" {
+  domain = "vpc"
 }
 
 
@@ -24,10 +34,13 @@ resource "aws_security_group" "websocket_sg" {
 resource "aws_instance" "websocket_server" {
   ami           = "ami-01abb191f665c021f"  # Ubuntu AMI ID
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.private_subnets[0].id
+  subnet_id     = aws_subnet.public_subnets[0].id
   vpc_security_group_ids = [aws_security_group.websocket_sg.id]
-
-
+  key_name               = "eks-ec2-key"  # SSH 키 이름 추가
+  root_block_device {
+    volume_size = 500  # EBS 볼륨 크기 (GB)
+    volume_type = "gp2"  # 일반적인 SSD
+  }
   user_data = <<-EOF
               #!/bin/bash
               # Update packages and install MariaDB
@@ -47,6 +60,7 @@ resource "aws_instance" "websocket_server" {
               # Create Python script for WebSocket and MariaDB logging
               cat << 'SCRIPT' > /home/ubuntu/binance_ws.py
               import websocket
+              import json
               import mysql.connector
 
               # Connect to MariaDB
@@ -58,15 +72,23 @@ resource "aws_instance" "websocket_server" {
               )
               cursor = db.cursor()
 
-              # WebSocket callback
               def on_message(ws, message):
-                  print(message)
-                  cursor.execute("INSERT INTO trades (data) VALUES (%s)", (message,))
-                  db.commit()
+                  data = json.loads(message)
+                  if 's' in data and data['s'] == 'LTCUSDT':  # LTCUSDT 데이터만 처리
+                      print(data)
+                      cursor.execute("INSERT INTO trades (data) VALUES (%s)", (json.dumps(data),))
+                      db.commit()
 
-              ws = websocket.WebSocketApp("wss://stream.binance.com:9443/ws/btcusdt@trade", on_message=on_message)
+              def on_open(ws):
+                  subscribe_message = {
+                      "method": "SUBSCRIBE",
+                      "params": ["ltcusdt@trade"],  # 라이트코인 거래 데이터
+                      "id": 1
+                  }
+                  ws.send(json.dumps(subscribe_message))
+
+              ws = websocket.WebSocketApp("wss://stream.binance.com:9443/ws", on_message=on_message, on_open=on_open)
               ws.run_forever()
-
               SCRIPT
 
               # Create database table for storing WebSocket data
@@ -81,3 +103,8 @@ resource "aws_instance" "websocket_server" {
   }
 }
 
+# Elastic IP를 EC2 인스턴스에 연결
+resource "aws_eip_association" "websocket_associate" {
+  instance_id = aws_instance.websocket_server.id
+  allocation_id = aws_eip.websocket_eip.id
+}

@@ -11,8 +11,5 @@
 .terraform/providers/registry.terraform.io/hashicorp/tls/4.0.6/linux_amd64/LICENSE.txt
 .terraform/providers/registry.terraform.io/hashicorp/tls/4.0.6/linux_amd64/terraform-provider-tls_v4.0.6_x5
 test.py
-.terraform.tfstate.lock.info
-terraform.tfstate
-terraform.tfstate.backup
 .terraform/providers/registry.terraform.io/hashicorp/kubernetes/2.32.0/linux_amd64/LICENSE.txt
 .terraform/providers/registry.terraform.io/hashicorp/kubernetes/2.32.0/linux_amd64/terraform-provider-kubernetes_v2.32.0_x5
